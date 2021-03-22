@@ -94,7 +94,6 @@ export default {
         const query = route.query
         if (query) {
           this.redirect = query.redirect
-          this.otherQuery = this.getOtherQuery(query)
         }
       },
       immediate: true
@@ -128,7 +127,8 @@ export default {
           this.loading = true
           this.$store.dispatch('user/login', this.loginForm)
             .then(() => {
-              this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
+              debugger
+              this.handleLogin()
               this.loading = false
             })
             .catch(() => {
@@ -142,15 +142,8 @@ export default {
     },
     handleLogin() {
       this.$router.push('/login')
-    },
-    getOtherQuery(query) {
-      return Object.keys(query).reduce((acc, cur) => {
-        if (cur !== 'redirect') {
-          acc[cur] = query[cur]
-        }
-        return acc
-      }, {})
     }
+
   }
 }
 </script>

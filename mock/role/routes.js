@@ -18,11 +18,6 @@ const constantRoutes = [
     hidden: true
   },
   {
-    path: '/auth-redirect',
-    component: 'views/login/auth-redirect',
-    hidden: true
-  },
-  {
     path: '/404',
     component: 'views/error-page/404',
     hidden: true
@@ -45,18 +40,18 @@ const constantRoutes = [
       }
     ]
   },
-  {
-    path: '/documentation',
-    component: 'layout/Layout',
-    children: [
-      {
-        path: 'index',
-        component: 'views/documentation/index',
-        name: 'Documentation',
-        meta: { title: 'Documentation', icon: 'documentation', affix: true }
-      }
-    ]
-  },
+  // {
+  //   path: '/documentation',
+  //   component: 'layout/Layout',
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       component: 'views/documentation/index',
+  //       name: 'Documentation',
+  //       meta: { title: 'Documentation', icon: 'documentation', affix: true }
+  //     }
+  //   ]
+  // },
   {
     path: '/guide',
     component: 'layout/Layout',
