@@ -122,23 +122,7 @@ export default {
       })
     },
     handleRegister() {
-      this.$refs.loginForm.validate(valid => {
-        if (valid) {
-          this.loading = true
-          this.$store.dispatch('user/login', this.loginForm)
-            .then(() => {
-              debugger
-              this.handleLogin()
-              this.loading = false
-            })
-            .catch(() => {
-              this.loading = false
-            })
-        } else {
-          console.log('error submit!!')
-          return false
-        }
-      })
+      this.handleLogin()
     },
     handleLogin() {
       this.$router.push('/login')
