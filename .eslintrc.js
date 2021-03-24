@@ -30,6 +30,7 @@ module.exports = {
       'before': true,
       'after': true
     }],
+    'no-unused-vars': "off",
     'block-spacing': [2, 'always'],
     'brace-style': [2, '1tbs', {
       'allowSingleLine': true
