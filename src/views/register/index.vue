@@ -21,29 +21,27 @@
         />
       </el-form-item>
 
-      <el-tooltip v-model="capsTooltip" content="Caps lock is On" placement="right" manual>
-        <el-form-item prop="password">
-          <span class="svg-container">
-            <svg-icon icon-class="password" />
-          </span>
-          <el-input
-            :key="passwordType"
-            ref="password"
-            v-model="loginForm.password"
-            :type="passwordType"
-            placeholder="Password"
-            name="password"
-            tabindex="2"
-            autocomplete="on"
-            @keyup.native="checkCapslock"
-            @blur="capsTooltip = false"
-            @keyup.enter.native="handleLogin"
-          />
-          <span class="show-pwd" @click="showPwd">
-            <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
-          </span>
-        </el-form-item>
-      </el-tooltip>
+      <el-form-item prop="password">
+        <span class="svg-container">
+          <svg-icon icon-class="password" />
+        </span>
+        <el-input
+          :key="passwordType"
+          ref="password"
+          v-model="loginForm.password"
+          :type="passwordType"
+          placeholder="Password"
+          name="password"
+          tabindex="2"
+          autocomplete="on"
+          @keyup.native="checkCapslock"
+          @keyup.enter.native="handleLogin"
+        />
+        <span class="show-pwd" @click="showPwd">
+          <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
+        </span>
+      </el-form-item>
+
       <div style="display:flex">
         <el-button style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">返回登录</el-button>
         <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleRegister">注册</el-button>
@@ -82,7 +80,6 @@ export default {
         password: [{ required: true, trigger: 'blur', validator: validatePassword }]
       },
       passwordType: 'password',
-      capsTooltip: false,
       loading: false,
       redirect: undefined,
       otherQuery: {}
@@ -107,10 +104,6 @@ export default {
     }
   },
   methods: {
-    checkCapslock(e) {
-      const { key } = e
-      this.capsTooltip = key && key.length === 1 && (key >= 'A' && key <= 'Z')
-    },
     showPwd() {
       if (this.passwordType === 'password') {
         this.passwordType = ''
@@ -122,7 +115,7 @@ export default {
       })
     },
     handleRegister() {
-      this.handleLogin()
+      this.$store.dispatch('user/register', this.loginForm)
     },
     handleLogin() {
       this.$router.push('/login')
@@ -133,8 +126,6 @@ export default {
 </script>
 
 <style lang="scss">
-/* 修复input 背景不协调 和光标变色 */
-/* Detail see https://github.com/PanJiaChen/vue-element-admin/pull/927 */
 
 $bg:#283443;
 $light_gray:#fff;

@@ -8,6 +8,14 @@ export function login(data) {
   })
 }
 
+export function register(data) {
+  return request.post('/register/all', data)
+}
+
+export function thirdLogin(data) {
+  return request.get('/login/google', { params: data })
+}
+
 export function getInfo(token) {
   return request({
     url: '/vue-element-admin/user/info',
