@@ -1,27 +1,19 @@
 import request from '@/utils/request'
 
 export function login(data) {
-  return request({
-    url: '/vue-element-admin/user/login',
-    method: 'post',
-    data
-  })
+  return request.post('/oauth/login/normal', data)
+}
+
+export function userInfo(data) {
+  return request.get('/usr/info/loadByStuId', { params: data })
 }
 
 export function register(data) {
-  return request.post('/register/all', data)
+  return request.post('/oauth/register/all', data)
 }
 
 export function thirdLogin(data) {
-  return request.get('/login/google', { params: data })
-}
-
-export function getInfo(token) {
-  return request({
-    url: '/vue-element-admin/user/info',
-    method: 'get',
-    params: { token }
-  })
+  return request.get('/oauth/login/google', { params: data })
 }
 
 export function logout() {
