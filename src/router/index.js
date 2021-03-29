@@ -98,6 +98,18 @@ export const constantRoutes = [
     ]
   },
   {
+    path: '/diseases',
+    component: Layout,
+    children: [
+      {
+        path: 'list',
+        component: () => import('@/views/diseases/index'),
+        name: 'DiseasesList',
+        meta: { title: '病种管理', icon: 'el-icon-s-grid' }
+      }
+    ]
+  },
+  {
     path: '/example',
     component: Layout,
     redirect: '/example/list',
