@@ -93,10 +93,9 @@ export default {
     },
     filterNode(value, data) {
       if (!value) return true
-      return data.label.indexOf(value) !== -1
+      return data.name.indexOf(value) !== -1
     },
     remove(node, data) {
-      debugger
       deleteDiseases({
         diseaseId: data.diseaseId
       }).then(response => {
@@ -105,7 +104,6 @@ export default {
       })
     },
     handleAppend() {
-      debugger
       const node = this.treeNode
       const id = node.data.diseaseId
 

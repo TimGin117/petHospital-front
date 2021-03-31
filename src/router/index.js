@@ -110,6 +110,30 @@ export const constantRoutes = [
     ]
   },
   {
+    path: '/cases',
+    component: Layout,
+    redirect: '/cases/list',
+    name: 'case',
+    meta: {
+      title: '病例管理',
+      icon: 'el-icon-s-order'
+    },
+    children: [
+      {
+        path: 'list',
+        component: () => import('@/views/cases/index'),
+        name: 'CasesList',
+        meta: { title: '病例列表', icon: 'el-icon-s-data' }
+      },
+      {
+        path: 'upload',
+        component: () => import('@/views/cases/upload'),
+        name: 'CasesUpload',
+        meta: { title: '上传病例', icon: 'el-icon-document-add' }
+      }
+    ]
+  },
+  {
     path: '/example',
     component: Layout,
     redirect: '/example/list',
