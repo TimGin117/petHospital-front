@@ -355,3 +355,15 @@ export function removeClass(ele, cls) {
     ele.className = ele.className.replace(reg, ' ')
   }
 }
+
+export function targetTreeItem(target, tree, prop = 'id') {
+  const dfs = (target, tree, depth) => {
+    if (!tree) return -1
+    const temp = tree.find(item => item[prop] === target[depth])
+    if (!temp) return -1
+    if (target.length === depth + 1) return temp
+    else return dfs(target, temp.children, depth + 1)
+  }
+
+  return dfs(target, tree, 0)
+}
