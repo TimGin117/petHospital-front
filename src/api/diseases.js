@@ -5,9 +5,9 @@ export function fetchDiseasesList() {
 }
 
 export function addDiseases(data) {
-  return request.post('/disease/addOne', data)
+  return request.post('/disease/addOne', null, { params: data })
 }
 
 export function deleteDiseases(data) {
-  return request.post('/disease/deleteOne', data)
+  return request.post('/disease/deleteOne', null, { params: data })
 }

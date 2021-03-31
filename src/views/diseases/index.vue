@@ -18,11 +18,12 @@
         <span>
           <el-button
             type="text"
-            @click="() => append(data)"
+            @click="() => append(node, data)"
           >
             添加
           </el-button>
           <el-button
+            v-if="node.isLeaf"
             type="text"
             @click="() => remove(node, data)"
           >
@@ -31,13 +32,22 @@
         </span>
       </span>
     </el-tree>
+    <el-dialog
+      title="添加病种"
+      :visible.sync="dialogVisible"
+      width="30%"
+    >
+      <el-input v-model="name" placeholder="病种名称" autocomplete="off" />
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="handleAppend">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { fetchDiseasesList } from '@/api/diseases'
-
-let id = 1000
+import { addDiseases, deleteDiseases, fetchDiseasesList } from '@/api/diseases'
 
 export default {
   name: 'DiseasesList',
@@ -46,6 +56,10 @@ export default {
     return {
       list: [],
       filterText: '',
+      name: '',
+      treeNodeData: null,
+      treeNode: null,
+      dialogVisible: false,
       defaultProps: {
         children: 'children',
         label: 'name',
@@ -66,28 +80,42 @@ export default {
       fetchDiseasesList().then(res => {
         const { data } = res
         this.list = [{
-          diseasesId: -1,
+          diseaseId: -1,
           name: '全部病种',
           children: data
         }]
       })
     },
-    append(data) {
-      const newChild = { diseasesId: id++, name: 'testtest', children: [] }
-      if (!data.children) {
-        this.$set(data, 'children', [])
-      }
-      data.children.unshift(newChild)
+    append(node, data) {
+      this.dialogVisible = true
+      this.treeNodeData = data
+      this.treeNode = node
     },
     filterNode(value, data) {
       if (!value) return true
       return data.label.indexOf(value) !== -1
     },
     remove(node, data) {
-      const parent = node.parent
-      const children = parent.data.children || parent.data
-      const index = children.findIndex(d => d.id === data.id)
-      children.splice(index, 1)
+      debugger
+      deleteDiseases({
+        diseaseId: data.diseaseId
+      }).then(response => {
+        this.fetchList()
+        this.$message.success('删除成功')
+      })
+    },
+    handleAppend() {
+      debugger
+      const node = this.treeNode
+      const id = node.data.diseaseId
+
+      addDiseases({
+        name: this.name,
+        parent: id
+      }).then(response => {
+        this.dialogVisible = false
+        this.fetchList()
+      })
     }
   }
 
