@@ -1,11 +1,6 @@
 <template>
   <div class="app-container">
     <el-form ref="form" :model="form" label-width="80px">
-      <el-form-item label="病种">
-        <DiseasesSelect
-          @change="handleSearchChange"
-        />
-      </el-form-item>
       <el-form-item label="诊断">
         <el-input v-model="form.diagnosis" type="textarea" />
       </el-form-item>
@@ -24,10 +19,10 @@
 </template>
 
 <script>
-import DiseasesSelect from '@/components/DiseasesSelect/index.vue'
+import disasesSelect from './components/disasesSelect.vue'
 import { addCase } from '@/api/case'
 export default {
-  components: { DiseasesSelect },
+  components: { disasesSelect },
   data() {
     return {
       form: {
