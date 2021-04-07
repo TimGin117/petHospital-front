@@ -14,7 +14,12 @@
     <el-timeline>
       <el-timeline-item v-for="item in list" :key="item.caseId" :timestamp="item.updateTime" placement="top">
         <el-card>
-          <h4>{{ item.name }}</h4>
+          <div class="header-wrapper">
+            <h4 v-if="item.valid">{{ item.name }}</h4>
+            <h4 v-else style="color: red">{{ `${item.name}-已删除` }} </h4>
+            <el-button v-if="item.valid" type="text" icon="el-icon-delete" @click="handleDelete(item.caseId)" />
+          </div>
+
           <p>诊断：{{ item.diagnosis }}</p>
           <p>检查：{{ item.inspection }}</p>
           <p>治疗：{{ item.treatment }}</p>
@@ -33,7 +38,7 @@
 
 <script>
 import _ from 'lodash'
-import { fetchCasesList } from '@/api/case'
+import { deleteCase, fetchCasesList } from '@/api/case'
 import { fetchDiseasesList } from '@/api/diseases'
 import { targetTreeItem } from '@/utils/index'
 
@@ -94,6 +99,14 @@ export default {
         name: this.targetName
       })
     },
+    handleDelete(caseId) {
+      deleteCase({ caseId }).then(res => {
+        this.$message.success('删除成功')
+        this.fetchList({
+          page: 1
+        })
+      })
+    },
     handleSearchChange(val) {
       this.fetchList({
         page: 1,
@@ -109,6 +122,11 @@ export default {
   width: 300px;
   margin-left: 68px;
   margin-bottom: 20px;
+}
+
+.header-wrapper {
+  display: flex;
+  justify-content: space-between;
 }
 
 .el-pagination {

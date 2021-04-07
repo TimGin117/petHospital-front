@@ -6,6 +6,7 @@ const state = {
   token: getToken(),
   name: '',
   avatar: '',
+  id: '',
   introduction: '',
   roles: []
 }
@@ -16,6 +17,9 @@ const mutations = {
   },
   SET_INTRODUCTION: (state, introduction) => {
     state.introduction = introduction
+  },
+  SET_ID: (state, id) => {
+    state.id = id
   },
   SET_NAME: (state, name) => {
     state.name = name
@@ -36,8 +40,10 @@ const actions = {
       login({ stuId: username.trim(), pwd: password }).then(response => {
         const { data } = response
         const { token, user } = data
+        debugger
         commit('SET_TOKEN', token)
         commit('SET_AVATAR', user.avatar)
+        commit('SET_ID', user.stuId)
         setToken(token)
         resolve()
       }).catch(error => {
@@ -54,6 +60,7 @@ const actions = {
     return userInfo({ stuId }).then(response => {
       const { data } = response
       commit('SET_AVATAR', data.avatar)
+      commit('SET_ID', data.stuId)
       Message.success('登录成功')
     })
   },

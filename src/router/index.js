@@ -133,6 +133,66 @@ export const constantRoutes = [
       }
     ]
   },
+  {
+    path: '/exam',
+    component: Layout,
+    children: [
+      {
+        path: 'list',
+        component: () => import('@/views/exam/index'),
+        name: 'ExamList',
+        meta: { title: '考试列表', icon: 'el-icon-date' }
+      }
+    ]
+  },
+  {
+    path: '/paper',
+    component: Layout,
+    redirect: '/paper/list',
+    name: 'paper',
+    meta: {
+      title: '试卷管理',
+      icon: 'el-icon-document-copy'
+    },
+    children: [
+      {
+        path: 'list',
+        component: () => import('@/views/cases/index'),
+        name: 'CasesList',
+        meta: { title: '试卷列表', icon: 'el-icon-s-data' }
+      },
+      {
+        path: 'upload',
+        component: () => import('@/views/cases/upload'),
+        name: 'CasesUpload',
+        meta: { title: '创建试卷', icon: 'el-icon-document-add' }
+      }
+    ]
+  },
+  {
+    path: '/question',
+    component: Layout,
+    redirect: '/question/list',
+    name: 'question',
+    meta: {
+      title: '问题管理',
+      icon: 'el-icon-postcard'
+    },
+    children: [
+      {
+        path: 'list',
+        component: () => import('@/views/cases/index'),
+        name: 'CasesList',
+        meta: { title: '问题列表', icon: 'el-icon-s-data' }
+      },
+      {
+        path: 'upload',
+        component: () => import('@/views/cases/upload'),
+        name: 'CasesUpload',
+        meta: { title: '创建问题', icon: 'el-icon-document-add' }
+      }
+    ]
+  },
   // {
   //   path: '/example',
   //   component: Layout,
