@@ -163,8 +163,8 @@ export const constantRoutes = [
       },
       {
         path: 'upload',
-        component: () => import('@/views/cases/upload'),
-        name: 'CasesUpload',
+        component: () => import('@/views/paper/upload'),
+        name: 'PaperUpload',
         meta: { title: '创建试卷', icon: 'el-icon-document-add' }
       }
     ]
@@ -181,14 +181,14 @@ export const constantRoutes = [
     children: [
       {
         path: 'list',
-        component: () => import('@/views/cases/index'),
-        name: 'CasesList',
+        component: () => import('@/views/question/index'),
+        name: 'QuestionList',
         meta: { title: '问题列表', icon: 'el-icon-s-data' }
       },
       {
         path: 'upload',
-        component: () => import('@/views/cases/upload'),
-        name: 'CasesUpload',
+        component: () => import('@/views/question/upload'),
+        name: 'QuestionUpload',
         meta: { title: '创建问题', icon: 'el-icon-document-add' }
       }
     ]

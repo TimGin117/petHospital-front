@@ -6,7 +6,7 @@ const state = {
   token: getToken(),
   name: '',
   avatar: '',
-  id: '',
+  id: 1,
   introduction: '',
   roles: []
 }
@@ -37,13 +37,13 @@ const actions = {
   login({ commit }, userInfo) {
     const { username, password } = userInfo
     return new Promise((resolve, reject) => {
-      login({ stuId: username.trim(), pwd: password }).then(response => {
+      login({ admName: username.trim(), pwd: password }).then(response => {
         const { data } = response
         const { token, user } = data
         debugger
         commit('SET_TOKEN', token)
         commit('SET_AVATAR', user.avatar)
-        commit('SET_ID', user.stuId)
+        commit('SET_ID', user.id)
         setToken(token)
         resolve()
       }).catch(error => {
@@ -60,7 +60,7 @@ const actions = {
     return userInfo({ stuId }).then(response => {
       const { data } = response
       commit('SET_AVATAR', data.avatar)
-      commit('SET_ID', data.stuId)
+      commit('SET_ID', data.id)
       Message.success('登录成功')
     })
   },
@@ -81,12 +81,7 @@ const actions = {
     const { username, password, socialUsrId } = userInfo
     return new Promise((resolve, reject) => {
       register({ stuId: username.trim(), pwd: password.trim(), socialUsrId }).then(response => {
-        const { data } = response
-        if (data) {
-          Message.success('注册成功')
-        } else {
-          Message.error('注册失败')
-        }
+        Message.success('注册成功')
         resolve()
       }).catch(error => {
         reject(error)

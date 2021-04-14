@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 
 export function login(data) {
-  return request.post('/oauth/login/normal', data)
+  return request.post('/oauth/admin/login/normal', data)
 }
 
 export function userInfo(data) {
@@ -9,7 +9,7 @@ export function userInfo(data) {
 }
 
 export function register(data) {
-  return request.post('/oauth/register/all', data)
+  return request.post('/oauth/register/adm', data)
 }
 
 export function thirdLogin(data) {

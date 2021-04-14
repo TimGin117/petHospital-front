@@ -69,6 +69,8 @@ export default {
         examName: this.form.examName,
         creatorId: Number(this.creatorId),
         startTime: moment(this.form.startTime).format('YYYY-MM-DD HH:mm:ss')
+      }).then(res => {
+        this.$message.success('添加考试成功')
       })
     },
     onCancel() {
