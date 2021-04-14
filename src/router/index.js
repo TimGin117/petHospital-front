@@ -141,7 +141,7 @@ export const constantRoutes = [
         path: 'list',
         component: () => import('@/views/exam/index'),
         name: 'ExamList',
-        meta: { title: '考试列表', icon: 'el-icon-date' }
+        meta: { title: '考试管理', icon: 'el-icon-date' }
       }
     ]
   },
@@ -157,8 +157,8 @@ export const constantRoutes = [
     children: [
       {
         path: 'list',
-        component: () => import('@/views/cases/index'),
-        name: 'CasesList',
+        component: () => import('@/views/paper/index'),
+        name: 'PaperList',
         meta: { title: '试卷列表', icon: 'el-icon-s-data' }
       },
       {

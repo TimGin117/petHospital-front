@@ -11,11 +11,11 @@
         <el-input v-model="dynamicValidateForm.paperName" />
       </el-form-item>
       <el-form-item
-        v-for="(question, index) in dynamicValidateForm.questions"
+        v-for="(question, index) in dynamicValidateForm.questionScores"
         :key="question.key"
         class="question"
         :label="'考题' + (index + 1)"
-        :prop="'questions.' + index + '.questionId'"
+        :prop="'questionScores.' + index + '.questionId'"
         :rules="{
           required: true, message: '考题不能为空', trigger: 'blur'
         }"
@@ -53,7 +53,7 @@ export default {
   data() {
     return {
       dynamicValidateForm: {
-        questions: [{
+        questionScores: [{
           questionId: '',
           score: 1
         }],
@@ -73,7 +73,7 @@ export default {
         if (valid) {
           debugger
           const formData = JSON.parse(JSON.stringify(this.dynamicValidateForm))
-          formData.questions = formData.questions.map(item => ({ questionId: item.questionId, score: item.score }))
+          formData.questionScores = formData.questionScores.map(item => ({ questionId: item.questionId, score: item.score }))
 
           addPaper({ ...formData, admId: this.id }).then(response => {
             this.$message.success('添加成功')
@@ -87,13 +87,13 @@ export default {
       this.$refs[formName].resetFields()
     },
     removeQuestion(item) {
-      var index = this.dynamicValidateForm.questions.indexOf(item)
+      var index = this.dynamicValidateForm.questionScores.indexOf(item)
       if (index !== -1) {
-        this.dynamicValidateForm.questions.splice(index, 1)
+        this.dynamicValidateForm.questionScores.splice(index, 1)
       }
     },
     addQuestion() {
-      this.dynamicValidateForm.questions.push({
+      this.dynamicValidateForm.questionScores.push({
         questionId: '',
         score: 1,
         key: Date.now()
