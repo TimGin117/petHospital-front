@@ -23,6 +23,10 @@
           <p>诊断：{{ item.diagnosis }}</p>
           <p>检查：{{ item.inspection }}</p>
           <p>治疗：{{ item.treatment }}</p>
+          <div style="display: flex; justify">
+            <p v-if="item.photoUri" style="display: flex; margin-right: 100px;">详情图片：<img width="300px" height="200px" :src="item.photoUri"></p>
+            <p v-if="item.videoUri" style="display: flex;">详情视频：<video width="300px" height="200px" :src="item.videoUri" controls="controls" /></p>
+          </div>
         </el-card>
       </el-timeline-item>
     </el-timeline>
