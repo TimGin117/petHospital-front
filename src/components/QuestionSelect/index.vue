@@ -18,13 +18,19 @@ export default {
     prop: 'value',
     event: 'change'
   },
+  props: {
+    // eslint-disable-next-line vue/require-default-prop
+    value: {
+      type: Number
+    }
+  },
   data() {
     return {
-      options: [],
-      value: ''
+      options: []
     }
   },
   created() {
+    console.log('value' + this.value)
     this.fetchList()
   },
   methods: {

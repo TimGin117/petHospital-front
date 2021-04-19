@@ -33,8 +33,8 @@
         width="120"
       >
         <template slot-scope="scope">
-          <el-button type="text" size="small" @click="handleClick(scope.row)">查看</el-button>
-          <el-button type="text" size="small">编辑</el-button>
+          <el-button type="text" size="small" @click="handleClick(scope.row.paperId)">编辑</el-button>
+          <el-button type="text" style="color: red;" size="small" @click="handleDelete(scope.row.paperId)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import { fetchPaperList } from '@/api/paper'
+import { deletePaper, fetchPaperList } from '@/api/paper'
 export default {
 
   data() {
@@ -58,6 +58,15 @@ export default {
       fetchPaperList().then(res => {
         this.tableData = res.data
       })
+    },
+    handleClick(paperId) {
+      this.$router.push({
+        name: 'PaperUpload',
+        query: { paperId }
+      })
+    },
+    handleDelete(paperId) {
+      deletePaper(paperId)
     }
   }
 }

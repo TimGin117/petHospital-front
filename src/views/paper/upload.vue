@@ -12,7 +12,7 @@
       </el-form-item>
       <el-form-item
         v-for="(question, index) in dynamicValidateForm.questionScores"
-        :key="question.key"
+        :key="question.questionId || question.key"
         class="question"
         :label="'考题' + (index + 1)"
         :prop="'questionScores.' + index + '.questionId'"
@@ -35,7 +35,7 @@
         <el-input-number v-model="dynamicValidateForm.duration" controls-position="right" :min="1" :step="10" />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="submitForm('dynamicValidateForm')">提交</el-button>
+        <el-button :type="paperId?'success':'primary'" @click="submitForm('dynamicValidateForm')">{{ paperId ? '修改考卷':'创建考卷' }}</el-button>
         <el-button @click="resetForm('dynamicValidateForm')">重置</el-button>
         <el-button @click="addQuestion">新增考题</el-button>
       </el-form-item>
@@ -45,7 +45,7 @@
 
 <script>
 import QuestionSelect from '@/components/QuestionSelect/index.vue'
-import { addPaper } from '@/api/paper'
+import { addPaper, updatePaper, findPaperById } from '@/api/paper'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -59,7 +59,8 @@ export default {
         }],
         paperName: '',
         duration: 90
-      }
+      },
+      paperId: ''
     }
   },
   computed: {
@@ -67,17 +68,32 @@ export default {
       'id'
     ])
   },
+  created() {
+    const {
+      paperId
+    } = this.$route.query
+
+    if (paperId) {
+      this.paperId = paperId
+      this.fetchPaper(paperId)
+    }
+  },
   methods: {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          debugger
           const formData = JSON.parse(JSON.stringify(this.dynamicValidateForm))
           formData.questionScores = formData.questionScores.map(item => ({ questionId: item.questionId, score: item.score }))
 
-          addPaper({ ...formData, admId: this.id }).then(response => {
-            this.$message.success('添加成功')
-          })
+          if (this.paperId) {
+            updatePaper({ ...formData, admId: this.id, paperId: this.paperId }).then(response => {
+              this.$message.success('修改成功')
+            })
+          } else {
+            addPaper({ ...formData, admId: this.id }).then(response => {
+              this.$message.success('添加成功')
+            })
+          }
         } else {
           return false
         }
@@ -97,6 +113,21 @@ export default {
         questionId: '',
         score: 1,
         key: Date.now()
+      })
+    },
+    fetchPaper(paperId) {
+      findPaperById({ paperId }).then(res => {
+        const {
+          questions: questionScores,
+          paperName,
+          duration
+        } = res.data
+
+        this.dynamicValidateForm = {
+          paperName,
+          duration,
+          questionScores
+        }
       })
     }
   }

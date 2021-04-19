@@ -22,3 +22,19 @@ export function logout() {
     method: 'post'
   })
 }
+
+export function loadAllUsr() {
+  return request.get('/usr/info/loadAllUsr')
+}
+
+export function change2Adm(data) {
+  return request.get('/usr/info/change2Adm', { params: data })
+}
+
+export function change2Normal(data) {
+  return request.get('/usr/info/change2Normal', { params: data })
+}
+
+export function change2Forbid(data) {
+  return request.get('/usr/info/change2Forbid', { params: data })
+}
