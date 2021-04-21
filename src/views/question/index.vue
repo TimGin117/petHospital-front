@@ -34,8 +34,10 @@ export default {
       })
     },
     handleDelete(id) {
-      deleteQuestion(id).then(response => {
+      deleteQuestion({ questionId: id }).then(response => {
+        this.$message.success('删除成功')
         this.fetchList()
+        this.list = this.list.filter(item => item.questionId !== id)
       })
     }
   }

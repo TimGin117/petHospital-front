@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import { fetchQuestionList } from '@/api/question'
+import { memoFetchQuestionList } from '@/api/question'
 
 export default {
   name: 'QuestionSelect',
@@ -35,7 +35,7 @@ export default {
   },
   methods: {
     fetchList() {
-      fetchQuestionList().then(response => {
+      memoFetchQuestionList().then(response => {
         const { data } = response
         this.options = data
       })

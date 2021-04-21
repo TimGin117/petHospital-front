@@ -66,7 +66,7 @@ export default {
       })
     },
     handleDelete(paperId) {
-      deletePaper(paperId)
+      deletePaper({ paperId })
     }
   }
 }
