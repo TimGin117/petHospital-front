@@ -66,7 +66,10 @@ export default {
       })
     },
     handleDelete(paperId) {
-      deletePaper({ paperId })
+      deletePaper({ paperId }).then(res => {
+        this.$message.success('删除成功')
+        this.fetchList()
+      })
     }
   }
 }

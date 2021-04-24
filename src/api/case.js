@@ -4,6 +4,10 @@ export function fetchCasesList(data) {
   return request.get('/case/findAll', { params: data })
 }
 
+export function fetchCase(data) {
+  return request.get('/case/findOne', { params: data })
+}
+
 export function addCase(data) {
   return request.post('/case/addOne', data)
 }

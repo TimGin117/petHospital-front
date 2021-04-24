@@ -12,3 +12,7 @@ export function addQuestion(data) {
 export function deleteQuestion(data) {
   return request.post('/question/deleteQuestion', data)
 }
+
+export function findQuestionById(data) {
+  return request.post('/question/findQuestionById', data)
+}

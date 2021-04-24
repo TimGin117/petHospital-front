@@ -1,43 +1,59 @@
 <template>
   <div class="app-container">
-    <el-cascader
-      v-model="search"
-      class="search-input"
-      :options="options"
-      :props="{
-        expandTrigger: 'hover',
-        label: 'name',
-        value: 'diseaseId',
-      }"
-      @change="handleSearchChange"
-    />
-    <el-timeline>
-      <el-timeline-item v-for="item in list" :key="item.caseId" :timestamp="item.updateTime" placement="top">
-        <el-card>
-          <div class="header-wrapper">
-            <h4 v-if="item.valid">{{ item.name }}</h4>
-            <h4 v-else style="color: red">{{ `${item.name}-已删除` }} </h4>
-            <el-button v-if="item.valid" type="text" icon="el-icon-delete" @click="handleDelete(item.caseId)" />
-          </div>
+    <el-form label-width="120px">
+      <el-form-item label="病种查询">
+        <el-cascader
+          v-model="search"
+          class="search-input"
+          :options="options"
+          :props="{
+            expandTrigger: 'hover',
+            label: 'name',
+            value: 'diseaseId',
+          }"
+          @change="handleSearchChange"
+        />
+      </el-form-item>
+      <el-form-item label="模糊搜索">
+        <el-input
+          v-model="keyword"
+          style="width: 400px"
+          placeholder="输入关键字进行搜索"
+          @change="handleKeywordChange"
+        />
+      </el-form-item>
+      <el-form>
 
-          <p>诊断：{{ item.diagnosis }}</p>
-          <p>检查：{{ item.inspection }}</p>
-          <p>治疗：{{ item.treatment }}</p>
-          <div style="display: flex; justify">
-            <p v-if="item.photoUri" style="display: flex; margin-right: 100px;">详情图片：<img width="300px" height="200px" :src="item.photoUri"></p>
-            <p v-if="item.videoUri" style="display: flex;">详情视频：<video width="300px" height="200px" :src="item.videoUri" controls="controls" /></p>
-          </div>
-        </el-card>
-      </el-timeline-item>
-    </el-timeline>
-    <el-pagination
-      :current-page="page"
-      :page-size="5"
-      layout="total, prev, pager, next, jumper"
-      :total="total"
-      @current-change="handleCurrentChange"
-    />
-  </div>
+        <el-timeline>
+          <el-timeline-item v-for="item in list" :key="item.caseId" :timestamp="item.updateTime" placement="top">
+            <el-card>
+              <div class="header-wrapper">
+                <h4 v-if="item.valid">{{ item.name }}</h4>
+                <h4 v-else style="color: red">{{ `${item.name}-已删除` }} </h4>
+                <div v-if="item.valid" class="operation-wrapper">
+                  <el-button type="text" icon="el-icon-edit" @click="handleEdit(item.caseId)" />
+                  <el-button type="text" icon="el-icon-delete" @click="handleDelete(item.caseId)" />
+                </div>
+              </div>
+
+              <p>诊断：{{ item.diagnosis }}</p>
+              <p>检查：{{ item.inspection }}</p>
+              <p>治疗：{{ item.treatment }}</p>
+              <div style="display: flex; justify">
+                <p v-if="item.photoUri" style="display: flex; margin-right: 100px;">详情图片：<img width="300px" height="200px" :src="item.photoUri"></p>
+                <p v-if="item.videoUri" style="display: flex;">详情视频：<video width="300px" height="200px" :src="item.videoUri" controls="controls" /></p>
+              </div>
+            </el-card>
+          </el-timeline-item>
+        </el-timeline>
+        <el-pagination
+          :current-page="page"
+          :page-size="5"
+          layout="total, prev, pager, next, jumper"
+          :total="total"
+          @current-change="handleCurrentChange"
+        />
+      </el-form></el-form></div>
 </template>
 
 <script>
@@ -53,7 +69,8 @@ export default {
       options: [],
       page: 1,
       total: 0,
-      search: ''
+      search: '',
+      keyword: ''
     }
   },
   computed: {
@@ -68,12 +85,6 @@ export default {
     this.fetchOptions()
   },
   methods: {
-    // filterNode(node, keyword) {
-    //   console.log('xxxx')
-    //   debugger
-    //   if (!keyword) return true
-    //   return node.name.indexOf(keyword) !== -1
-    // },
     fetchOptions() {
       fetchDiseasesList().then(res => {
         const { data } = res
@@ -111,10 +122,24 @@ export default {
         })
       })
     },
+    handleEdit(caseId) {
+      this.$router.push({
+        name: 'CasesUpload',
+        query: {
+          caseId
+        }
+      })
+    },
     handleSearchChange(val) {
       this.fetchList({
         page: 1,
         name: this.targetName
+      })
+    },
+    handleKeywordChange(val) {
+      this.fetchList({
+        page: 1,
+        keyword: this.keyword
       })
     }
   }
@@ -124,8 +149,6 @@ export default {
 <style scoped>
 .search-input {
   width: 300px;
-  margin-left: 68px;
-  margin-bottom: 20px;
 }
 
 .header-wrapper {

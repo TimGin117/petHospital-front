@@ -3,6 +3,7 @@
     <el-card v-for="item in list" :key="item.questionId">
       <div class="header-wrapper">
         <h4>题干：{{ item.stem }}</h4>
+        <!-- <el-button type="text" icon="el-icon-edit" @click="handleEdit(item.questionId)" /> -->
         <el-button type="text" icon="el-icon-delete" @click="handleDelete(item.questionId)" />
       </div>
       <p>A：{{ item.choices[0] }}</p>
@@ -38,6 +39,14 @@ export default {
         this.$message.success('删除成功')
         this.fetchList()
         this.list = this.list.filter(item => item.questionId !== id)
+      })
+    },
+    handleEdit(id) {
+      this.$router.push({
+        name: 'QuestionUpload',
+        query: {
+          questionId: id
+        }
       })
     }
   }

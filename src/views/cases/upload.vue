@@ -1,9 +1,16 @@
 <template>
   <div class="app-container">
     <el-form ref="form" :model="form" label-width="80px">
-      <el-form-item label="病种">
+      <el-form-item v-if="name===''" label="病种">
         <DiseasesSelect
           @change="handleSearchChange"
+        />
+      </el-form-item>
+      <el-form-item v-else label="病种">
+        <el-input
+          style="width: 400px"
+          :placeholder="name"
+          :disabled="true"
         />
       </el-form-item>
       <el-form-item label="诊断">
@@ -15,7 +22,7 @@
             class="avatar-uploader"
             action="http://localhost:9527/dev-api/file/upload"
             :show-file-list="false"
-            :on-success="handleImgSuccess"
+            :on-success="(res) => handleImgSuccess('diagnosis',res)"
           >
             <img v-if="form.diagnosisPhotoUri" :src="form.diagnosisPhotoUri" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon" />
@@ -24,7 +31,7 @@
         <el-form-item label="视频">
           <el-upload
             class="avatar-uploader"
-            :http-request="handleUpload"
+            :http-request="(file) => handleUpload('diagnosis',file)"
             action=""
             :show-file-list="false"
           >
@@ -42,7 +49,7 @@
             class="avatar-uploader"
             action="http://localhost:9527/dev-api/file/upload"
             :show-file-list="false"
-            :on-success="handleImgSuccess"
+            :on-success="(res) => handleImgSuccess('inspection',res)"
           >
             <img v-if="form.inspectionPhotoUri" :src="form.inspectionPhotoUri" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon" />
@@ -51,9 +58,9 @@
         <el-form-item label="视频">
           <el-upload
             class="avatar-uploader"
-            action="http://localhost:9527/dev-api/file/upload"
+            action=""
             :show-file-list="false"
-            :on-success="handleVideoSuccess"
+            :http-request="(file) => handleUpload('inspection',file)"
           >
             <video v-if="form.inspectionVideoUri" :src="form.inspectionVideoUri" class="avatar" controls="controls" />
             <i v-else class="el-icon-plus avatar-uploader-icon" />
@@ -69,7 +76,7 @@
             class="avatar-uploader"
             action="http://localhost:9527/dev-api/file/upload"
             :show-file-list="false"
-            :on-success="handleImgSuccess"
+            :on-success="(res) => handleImgSuccess('treatment',res)"
           >
             <img v-if="form.treatmentPhotoUri" :src="form.treatmentPhotoUri" class="avatar">
             <i v-else class="el-icon-plus avatar-uploader-icon" />
@@ -78,9 +85,9 @@
         <el-form-item label="视频">
           <el-upload
             class="avatar-uploader"
-            action="http://localhost:9527/dev-api/file/upload"
+            action=""
             :show-file-list="false"
-            :on-success="handleVideoSuccess"
+            :http-request="(file) => handleUpload('treatment',file)"
           >
             <video v-if="form.treatmentVideoUri" :src="form.treatmentVideoUri" class="avatar" controls="controls" />
             <i v-else class="el-icon-plus avatar-uploader-icon" />
@@ -89,8 +96,8 @@
       </div>
 
       <el-form-item>
-        <el-button type="primary" @click="onSubmit">立即创建</el-button>
-        <el-button @click="onCancel">取消</el-button>
+        <el-button :type="caseId?'success':'primary'" @click="submitForm('form')">{{ caseId ? '修改病例':'新建病例' }}</el-button>
+        <el-button @click="resetForm('form')">重置</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -98,7 +105,7 @@
 
 <script>
 import DiseasesSelect from '@/components/DiseasesSelect/index.vue'
-import { addCase } from '@/api/case'
+import { addCase, updateCase, fetchCase } from '@/api/case'
 import { uploadChunks } from '@/api/file'
 import md5 from 'md5'
 
@@ -106,6 +113,7 @@ export default {
   components: { DiseasesSelect },
   data() {
     return {
+      caseId: '',
       form: {
         name: '',
         diagnosis: '',
@@ -117,28 +125,79 @@ export default {
         treatment: '',
         treatmentVideoUri: '',
         treatmentPhotoUri: ''
-      }
+      },
+      name: ''
+    }
+  },
+  created() {
+    const {
+      caseId
+    } = this.$route.query
+
+    if (caseId) {
+      this.caseId = caseId
+      this.fetchCase(caseId)
     }
   },
   methods: {
+    fetchCase(caseId) {
+      fetchCase({ caseId }).then(res => {
+        const {
+          name,
+          diagnosis,
+          diagnosisVideoUri,
+          diagnosisPhotoUri,
+          inspection,
+          inspectionVideoUri,
+          inspectionPhotoUri,
+          treatment,
+          treatmentVideoUri,
+          treatmentPhotoUri
+        } = res.data
+        debugger
+        this.name = name
+
+        this.form = {
+          name,
+          diagnosis,
+          diagnosisVideoUri,
+          diagnosisPhotoUri,
+          inspection,
+          inspectionVideoUri,
+          inspectionPhotoUri,
+          treatment,
+          treatmentVideoUri,
+          treatmentPhotoUri
+        }
+      })
+    },
     handleSearchChange(name) {
       this.$set(this.form, 'name', name)
     },
-    onSubmit() {
-      addCase(this.form).then(Response => {
-        this.$message.success('添加成功')
+    submitForm(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          if (this.paperId) {
+            updateCase(this.form).then(response => {
+              this.$message.success('修改成功')
+            })
+          } else {
+            addCase(this.form).then(Response => {
+              this.$message.success('添加成功')
+            })
+          }
+        } else {
+          return false
+        }
       })
     },
-    onCancel() {
-      this.$refs.form.resetFields()
+    resetForm(formName) {
+      this.$refs[formName].resetFields()
     },
-    handleImgSuccess(res) {
-      this.$set(this.form, 'diagnosisPhotoUri', res.data)
+    handleImgSuccess(prop, res) {
+      this.$set(this.form, `${prop}PhotoUri`, res.data)
     },
-    handleVideoSuccess(res) {
-      this.form.videoUri = res.data
-    },
-    handleUpload(upload) {
+    handleUpload(prop, upload) {
       const {
         file
       } = upload
@@ -160,6 +219,8 @@ export default {
         end = start + piece
       }
 
+      let cnt = 0
+
       chunks.forEach((chunk, index) => {
         const formData = new FormData()
         formData.append('md5', hash)
@@ -170,7 +231,12 @@ export default {
         formData.append('ext', ext)
         formData.append('file', chunk)
 
-        uploadChunks(formData)
+        uploadChunks(formData).then(res => {
+          cnt++
+          if (cnt === chunks.length) {
+            this.$set(this.form, `${prop}VideoUri`, res.data)
+          }
+        })
         // uploadChunks({
         //   md5: hash,
         //   chunks: chunks.length,
@@ -188,7 +254,7 @@ export default {
 
 <style scoped>
   .el-input {
-      margin-bottom: 20px;
+    margin-bottom: 20px;
   }
 
   .el-textarea {

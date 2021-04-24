@@ -15,7 +15,7 @@
 <script>
 import _ from 'lodash'
 import { fetchDiseasesList } from '@/api/diseases'
-import { targetTreeItem } from '@/utils/index'
+import { targetTreeItem, targetTreeItemByName } from '@/utils/index'
 
 export default {
   model: {
@@ -24,6 +24,10 @@ export default {
   },
   props: {
     value: {
+      type: String,
+      default: ''
+    },
+    name: {
       type: String,
       default: ''
     }
@@ -40,12 +44,19 @@ export default {
       return ''
     }
   },
-  created() {
-    this.fetchOptions()
+  async created() {
+    debugger
+    await this.fetchOptions()
+    this.changeValueByName()
   },
   methods: {
-    fetchOptions() {
-      fetchDiseasesList().then(res => {
+    changeValueByName() {
+      if (!this.name) return
+      debugger
+      this.value = targetTreeItemByName(this.name, this.options, 'diseaseId')
+    },
+    async fetchOptions() {
+      await fetchDiseasesList().then(res => {
         const { data } = res
         this.options = data
       })

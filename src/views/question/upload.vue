@@ -39,7 +39,7 @@
 
 <script>
 import DiseasesSelect from '@/components/DiseasesSelect/index.vue'
-import { addQuestion } from '@/api/question'
+import { addQuestion, findQuestionById } from '@/api/question'
 import { mapGetters } from 'vuex'
 export default {
   components: { DiseasesSelect },
@@ -58,10 +58,41 @@ export default {
   },
   computed: {
     ...mapGetters({
-      creatorId: 'id'
+      creatorId: 'id',
+      questionId: ''
     })
   },
+  created() {
+    const {
+      questionId
+    } = this.$route.query
+
+    if (questionId) {
+      this.questionId = questionId
+      this.fetchQuestion(questionId)
+    }
+  },
   methods: {
+    fetchQuestion(questionId) {
+      findQuestionById({ questionId }).then(res => {
+        const {
+          diseaseId,
+          choices,
+          stem,
+          answer
+        } = res.data
+
+        this.form = {
+          diseaseId: String(diseaseId),
+          choiceA: choices[0],
+          choiceB: choices[1],
+          choiceC: choices[2],
+          choiceD: choices[3],
+          stem,
+          answer
+        }
+      })
+    },
     onSubmit() {
       const question = {
         diseaseId: this.form.diseaseId[this.form.diseaseId.length - 1],

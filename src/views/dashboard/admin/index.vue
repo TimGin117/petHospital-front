@@ -1,7 +1,15 @@
 <template>
   <div class="dashboard-editor-container">
     <github-corner class="github-corner" />
-
+    <div>
+      <h3>虚拟宠物医院管理后台</h3>
+    </div>
+    <el-carousel height="300px">
+      <el-carousel-item v-for="item in images" :key="item.id">
+        <!-- <img style="object-fit: cover;" :src="item.url"> -->
+        <div class="background-img" :style="`background-image: url(${item.url})`" />
+      </el-carousel-item>
+    </el-carousel>
     <panel-group @handleSetLineChartData="handleSetLineChartData" />
     <!--
     <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
@@ -43,6 +51,7 @@
 <script>
 import GithubCorner from '@/components/GithubCorner'
 import PanelGroup from './components/PanelGroup'
+import { fetchCatImage } from '@/api/file'
 // import LineChart from './components/LineChart'
 // import RaddarChart from './components/RaddarChart'
 // import PieChart from './components/PieChart'
@@ -85,10 +94,20 @@ export default {
   },
   data() {
     return {
-      lineChartData: lineChartData.newVisitis
+      lineChartData: lineChartData.newVisitis,
+      images: []
     }
   },
+  created() {
+    this.getImages()
+  },
   methods: {
+    getImages() {
+      fetchCatImage().then(res => {
+        console.log(res)
+        this.images = res.data
+      })
+    },
     handleSetLineChartData(type) {
       this.lineChartData = lineChartData[type]
     }
@@ -99,7 +118,6 @@ export default {
 <style lang="scss" scoped>
 .dashboard-editor-container {
   padding: 32px;
-  background-color: rgb(240, 242, 245);
   position: relative;
 
   .github-corner {
@@ -114,6 +132,14 @@ export default {
     padding: 16px 16px 0;
     margin-bottom: 32px;
   }
+}
+
+.background-img {
+  width: 100%;
+  height: 300px;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
 }
 
 @media (max-width:1024px) {

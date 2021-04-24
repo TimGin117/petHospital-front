@@ -367,3 +367,16 @@ export function targetTreeItem(target, tree, prop = 'id') {
 
   return dfs(target, tree, 0)
 }
+
+export function targetTreeItemByName(name, tree, prop = 'id') {
+  debugger
+  const dfs = (name, tree, path) => {
+    if (!tree) return -1
+    tree.forEach(item => {
+      if (item.name === name) return path.push(item[prop])
+      else dfs(name, item.children, path.push(item[prop]))
+    })
+  }
+
+  return dfs(name, tree, [])
+}
