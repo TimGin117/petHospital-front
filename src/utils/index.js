@@ -369,7 +369,6 @@ export function targetTreeItem(target, tree, prop = 'id') {
 }
 
 export function targetTreeItemByName(name, tree, prop = 'id') {
-  debugger
   const dfs = (name, tree, path) => {
     if (!tree) return -1
     tree.forEach(item => {

@@ -45,14 +45,13 @@ export default {
     }
   },
   async created() {
-    debugger
     await this.fetchOptions()
     this.changeValueByName()
   },
   methods: {
     changeValueByName() {
       if (!this.name) return
-      debugger
+
       this.value = targetTreeItemByName(this.name, this.options, 'diseaseId')
     },
     async fetchOptions() {

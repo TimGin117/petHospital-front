@@ -5,6 +5,7 @@
         <el-cascader
           v-model="search"
           class="search-input"
+          clearable
           :options="options"
           :props="{
             expandTrigger: 'hover',
@@ -37,11 +38,19 @@
               </div>
 
               <p>诊断：{{ item.diagnosis }}</p>
+              <div style="display: flex; justify">
+                <p v-if="item.diagnosisPhotoUri" style="display: flex; margin-right: 100px;">详情图片：<img width="300px" height="200px" :src="item.diagnosisPhotoUri"></p>
+                <p v-if="item.diagnosisVideoUri" style="display: flex;">详情视频：<video width="300px" height="200px" :src="item.diagnosisVideoUri" controls="controls" /></p>
+              </div>
               <p>检查：{{ item.inspection }}</p>
+              <div style="display: flex; justify">
+                <p v-if="item.inspectionPhotoUri" style="display: flex; margin-right: 100px;">详情图片：<img width="300px" height="200px" :src="item.inspectionPhotoUri"></p>
+                <p v-if="item.inspectionVideoUri" style="display: flex;">详情视频：<video width="300px" height="200px" :src="item.inspectionVideoUri" controls="controls" /></p>
+              </div>
               <p>治疗：{{ item.treatment }}</p>
               <div style="display: flex; justify">
-                <p v-if="item.photoUri" style="display: flex; margin-right: 100px;">详情图片：<img width="300px" height="200px" :src="item.photoUri"></p>
-                <p v-if="item.videoUri" style="display: flex;">详情视频：<video width="300px" height="200px" :src="item.videoUri" controls="controls" /></p>
+                <p v-if="item.treatmentPhotoUri" style="display: flex; margin-right: 100px;">详情图片：<img width="300px" height="200px" :src="item.treatmentPhotoUri"></p>
+                <p v-if="item.treatmentVideoUri" style="display: flex;">详情视频：<video width="300px" height="200px" :src="item.treatmentVideoUri" controls="controls" /></p>
               </div>
             </el-card>
           </el-timeline-item>
@@ -91,12 +100,13 @@ export default {
         this.options = data
       })
     },
-    fetchList({ page = 1, size = 5, name = '' } = {}) {
+    fetchList({ page = 1, size = 5, name = '', keyword = '' } = {}) {
       this.page = page
       fetchCasesList({
         page,
         size,
-        name
+        name,
+        keyword
       }).then(response => {
         const { data } = response
         const {

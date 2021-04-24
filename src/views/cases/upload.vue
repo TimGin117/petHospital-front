@@ -22,6 +22,8 @@
             class="avatar-uploader"
             action="http://localhost:9527/dev-api/file/upload"
             :show-file-list="false"
+            :on-progress="handleProgress"
+            accept=".jpg,.jpeg,.png,.JPG,.JPEG"
             :on-success="(res) => handleImgSuccess('diagnosis',res)"
           >
             <img v-if="form.diagnosisPhotoUri" :src="form.diagnosisPhotoUri" class="avatar">
@@ -33,6 +35,7 @@
             class="avatar-uploader"
             :http-request="(file) => handleUpload('diagnosis',file)"
             action=""
+            accept=".avi,.AVI,.mkv,.MKV,.mp4,.MP4,.rmvb,.RMVB,.wmv,.WMV"
             :show-file-list="false"
           >
             <video v-if="form.diagnosisVideoUri" :src="form.diagnosisVideoUri" class="avatar" controls="controls" />
@@ -47,6 +50,7 @@
         <el-form-item label="图片">
           <el-upload
             class="avatar-uploader"
+            accept=".jpg,.jpeg,.png,.JPG,.JPEG"
             action="http://localhost:9527/dev-api/file/upload"
             :show-file-list="false"
             :on-success="(res) => handleImgSuccess('inspection',res)"
@@ -60,6 +64,7 @@
             class="avatar-uploader"
             action=""
             :show-file-list="false"
+            accept=".avi,.AVI,.mkv,.MKV,.mp4,.MP4,.rmvb,.RMVB,.wmv,.WMV"
             :http-request="(file) => handleUpload('inspection',file)"
           >
             <video v-if="form.inspectionVideoUri" :src="form.inspectionVideoUri" class="avatar" controls="controls" />
@@ -74,6 +79,7 @@
         <el-form-item label="图片">
           <el-upload
             class="avatar-uploader"
+            accept=".jpg,.jpeg,.png,.JPG,.JPEG"
             action="http://localhost:9527/dev-api/file/upload"
             :show-file-list="false"
             :on-success="(res) => handleImgSuccess('treatment',res)"
@@ -86,6 +92,7 @@
           <el-upload
             class="avatar-uploader"
             action=""
+            accept=".avi,.AVI,.mkv,.MKV,.mp4,.MP4,.rmvb,.RMVB,.wmv,.WMV"
             :show-file-list="false"
             :http-request="(file) => handleUpload('treatment',file)"
           >
@@ -126,7 +133,8 @@ export default {
         treatmentVideoUri: '',
         treatmentPhotoUri: ''
       },
-      name: ''
+      name: '',
+      createTime: ''
     }
   },
   created() {
@@ -152,10 +160,13 @@ export default {
           inspectionPhotoUri,
           treatment,
           treatmentVideoUri,
-          treatmentPhotoUri
+          treatmentPhotoUri,
+          createTime
         } = res.data
-        debugger
+
         this.name = name
+
+        this.createTime = createTime
 
         this.form = {
           name,
@@ -177,8 +188,8 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          if (this.paperId) {
-            updateCase(this.form).then(response => {
+          if (this.caseId) {
+            updateCase({ ...this.form, createTime: this.createTime }).then(response => {
               this.$message.success('修改成功')
             })
           } else {
@@ -196,6 +207,11 @@ export default {
     },
     handleImgSuccess(prop, res) {
       this.$set(this.form, `${prop}PhotoUri`, res.data)
+    },
+    handleProgress(event, file) {
+      console.log(file.percentage)
+      console.log(file)
+      console.log(event)
     },
     handleUpload(prop, upload) {
       const {
@@ -276,6 +292,11 @@ export default {
     cursor: pointer;
     position: relative;
     overflow: hidden;
+    width: 178px;
+    height: 178px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   .avatar-uploader >>> .el-upload:hover {
     border-color: #409EFF;

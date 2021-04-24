@@ -40,7 +40,7 @@ const actions = {
       login({ admName: username.trim(), pwd: password }).then(response => {
         const { data } = response
         const { token, user } = data
-        debugger
+
         commit('SET_TOKEN', token)
         commit('SET_AVATAR', user.avatar)
         commit('SET_ID', user.id)
