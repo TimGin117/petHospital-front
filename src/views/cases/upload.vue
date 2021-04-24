@@ -189,7 +189,7 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           if (this.caseId) {
-            updateCase({ ...this.form, createTime: this.createTime }).then(response => {
+            updateCase({ ...this.form, caseId: this.caseId, createTime: this.createTime }).then(response => {
               this.$message.success('修改成功')
             })
           } else {
