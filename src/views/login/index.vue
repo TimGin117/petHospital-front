@@ -141,12 +141,15 @@ export default {
     handleLogin() {
       this.validateLoginForm(() => {
         this.loading = true
+        console.log('login')
         this.$store.dispatch('user/login', this.loginForm)
-          .then(() => {
+          .then((res) => {
+            debugger
             this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
             this.loading = false
           })
           .catch(() => {
+            debugger
             this.loading = false
           })
       })

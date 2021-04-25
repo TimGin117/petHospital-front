@@ -39,11 +39,12 @@ const actions = {
     return new Promise((resolve, reject) => {
       login({ admName: username.trim(), pwd: password }).then(response => {
         const { data } = response
-        const { token, user } = data
+        const { token, user, adm } = data
+        const me = user || adm
 
         commit('SET_TOKEN', token)
-        commit('SET_AVATAR', user.avatar)
-        commit('SET_ID', user.id)
+        commit('SET_AVATAR', me.avatar)
+        commit('SET_ID', me.id)
         setToken(token)
         resolve()
       }).catch(error => {

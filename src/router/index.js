@@ -128,7 +128,7 @@ export const constantRoutes = [
       {
         path: 'upload',
         component: () => import('@/views/cases/upload'),
-        name: 'CasesUpload',
+        name: ' ',
         meta: { title: '上传病例', icon: 'el-icon-document-add' }
       }
     ]
