@@ -20,7 +20,7 @@
         <el-form-item label="图片">
           <el-upload
             class="avatar-uploader"
-            action="http://localhost:9527/dev-api/file/upload"
+            action="http://139.9.217.28/api/file/upload"
             :show-file-list="false"
             :on-progress="handleProgress"
             accept=".jpg,.jpeg,.png,.JPG,.JPEG"
@@ -51,7 +51,7 @@
           <el-upload
             class="avatar-uploader"
             accept=".jpg,.jpeg,.png,.JPG,.JPEG"
-            action="http://localhost:9527/dev-api/file/upload"
+            action="http://139.9.217.28/api/file/upload"
             :show-file-list="false"
             :on-success="(res) => handleImgSuccess('inspection',res)"
           >
@@ -80,7 +80,7 @@
           <el-upload
             class="avatar-uploader"
             accept=".jpg,.jpeg,.png,.JPG,.JPEG"
-            action="http://localhost:9527/dev-api/file/upload"
+            action="http://139.9.217.28/api/file/upload"
             :show-file-list="false"
             :on-success="(res) => handleImgSuccess('treatment',res)"
           >
@@ -115,6 +115,9 @@ import DiseasesSelect from '@/components/DiseasesSelect/index.vue'
 import { addCase, updateCase, fetchCase } from '@/api/case'
 import { uploadChunks } from '@/api/file'
 import md5 from 'md5'
+
+// http://139.9.217.28/api/file/upload
+// http://localhost:9527/dev-api/file/upload
 
 export default {
   components: { DiseasesSelect },
